@@ -1,6 +1,8 @@
 import numpy as np
 
 def sigmoid(x):
+    #if input is matrix
+    #so every element int martrix should be exp()
 	return 1/(1+np.exp(-x))
 
 def sigmoid_prime(x):
@@ -40,6 +42,9 @@ def sparse_autoencoder_cost(theta,visible_size,hidden_size,_lambda,sparsity_para
         num=data.shape[1]
 
         #FP
+        #and dot should be the normal multiplification of two matrix
+        #so z2 should be 25*10000
+        #and z3 should be 64*10000
         z2=W1.dot(data)+np.tile(b1,(num,1)).transpose()
         a2=sigmoid(z2)
         z3=W2.dot(a2)+np.tile(b2,(num,1)).transpose()
@@ -54,7 +59,7 @@ def sparse_autoencoder_cost(theta,visible_size,hidden_size,_lambda,sparsity_para
 
         #BP
         sparsity_delta=np.tile(-rho/rho_hat+(1 - rho)/(1 - rho_hat),(num,1)).transpose()
-
+        #the * operation here should be just the element*element at the same position in the matrix
         delta3=-(data-h)*sigmoid_prime(z3)
         delta2=(W2.transpose().dot(delta3)+beta*sparsity_delta)*sigmoid_prime(z2)
         W1_grad=delta2.dot(data.transpose())/num+_lambda*W1
